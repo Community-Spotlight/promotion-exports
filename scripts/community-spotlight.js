@@ -80,6 +80,6 @@ function getPromotion(type, optParams) {
   const returner = { ...promo };
   delete returner.media;
   return {
-    ...returner, url: `${base}promotion-media/main/${type}/${returner.id}/${path}`
+    ...returner, url: `${base}promotion-media/main/${type}s/${returner.id}/${path}`
   };
 }
