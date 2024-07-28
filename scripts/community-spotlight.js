@@ -4,7 +4,7 @@
   Developers may Freely use this to Incorporate Promotions in their Projects
 
   Licence: MIT
-  Version: 1.0.0
+  Version: 1.0.1
 */
 
 window.CSPromos = {}; // CS Storage
@@ -39,7 +39,7 @@ function getPromotion(type, optParams) {
 
   if (optParams.tags && optParams.tags.length > 0) {
     json = Object.fromEntries(
-      Object.entries(json).filter(([_, promo]) => promo.tags.some(tag => optParams.tags.includes(tag)))
+      Object.entries(json).filter(([_, promo]) => promo.tags.some(tag => optParams.tags.includes(tag.toLowerCase())))
     );
   }
   const keys = Object.keys(json).filter(id => {
