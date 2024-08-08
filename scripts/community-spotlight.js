@@ -60,13 +60,13 @@ function getPromotion(type, optParams) {
     if (type === "image") {
       const imgs = media.images;
       let img = imgs.find(v => (!optParams.aspectRatio || v.size === optParams.aspectRatio));
-      path = img ? `${img.size}.${img.type.toLowerCase()}` : null;
+      path = img ? `${img.size}.${img.type}` : null;
     } else if (type === "video") {
       const videos = media.videos;
       let video = videos.find(v => 
         (!optParams.aspectRatio || v.size === optParams.aspectRatio) && (!optParams.videoLength || v.length === optParams.videoLength)
       );
-      path = video ? `sz${video.size.replace(":", "x")}leng${video.length}.${video.type.toLowerCase()}` : null;
+      path = video ? `sz${video.size.replace(":", "x")}leng${video.length}.${video.type}` : null;
     }
     if (path) break;
     tries++;
