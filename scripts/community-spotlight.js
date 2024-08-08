@@ -4,7 +4,7 @@
   Developers may Freely use this to Incorporate Promotions in their Projects
 
   Licence: MIT
-  Version: 1.0.1
+  Version: 1.0.2
 */
 
 window.CSPromos = {}; // CS Storage
@@ -58,15 +58,13 @@ function getPromotion(type, optParams) {
     promo = json[id];
     const media = promo.media;
     if (type === "image") {
-      const sizes = Object.keys(media.images);
-      const aspectRatio = optParams.aspectRatio || randItem(sizes);
-      path = sizes.includes(aspectRatio) ? aspectRatio : null;
-      path = path ? `${path}.${media.images[path].type.toLowerCase()}` : null;
+      const imgs = media.images;
+      let img = imgs.find(v => (!optParams.aspectRatio || v.size === optParams.aspectRatio));
+      path = img ? `${img.size}.${img.type.toLowerCase()}` : null;
     } else if (type === "video") {
       const videos = media.videos;
       let video = videos.find(v => 
-        (!optParams.aspectRatio || v.size === optParams.aspectRatio) && 
-        (!optParams.videoLength || v.length === optParams.videoLength)
+        (!optParams.aspectRatio || v.size === optParams.aspectRatio) && (!optParams.videoLength || v.length === optParams.videoLength)
       );
       path = video ? `sz${video.size.replace(":", "x")}leng${video.length}.${video.type.toLowerCase()}` : null;
     }
