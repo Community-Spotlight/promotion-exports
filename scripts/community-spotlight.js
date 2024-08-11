@@ -4,7 +4,7 @@
   Developers may Freely use this to Incorporate Promotions in their Projects
 
   Licence: MIT
-  Version: 1.0.2
+  Version: 1.0.3
 */
 
 window.CSPromos = {}; // CS Storage
@@ -78,6 +78,6 @@ function getPromotion(type, optParams) {
   const returner = { ...promo };
   delete returner.media;
   return {
-    ...returner, url: `${base}promotion-media/main/${type}s/${returner.id}/${path}`
+    ...returner, url: `${base}promotion-media/main/${encodeURIComponent(returner.id)}/${path}`
   };
 }
