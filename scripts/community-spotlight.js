@@ -4,7 +4,7 @@
   Developers may Freely use this to Incorporate Promotions in their Projects
 
   Licence: MIT
-  Version: 1.0.3
+  Version: 1.1.0
 */
 
 window.CSPromos = {}; // CS Storage
@@ -35,35 +35,34 @@ function getPromotion(type, optParams) {
   const randItem = (array) => array[Math.floor(Math.random() * array.length)];
   type = type === "video" ? "video" : "image";
   optParams = typeof optParams === "object" ? optParams : {};
-  let json = window.CSPromos;
-
+  let json = { ...window.CSPromos };
   if (optParams.tags && optParams.tags.length > 0) {
     json = Object.fromEntries(
       Object.entries(json).filter(([_, promo]) => promo.tags.some(tag => optParams.tags.includes(tag.toLowerCase())))
     );
   }
-  const keys = Object.keys(json).filter(id => {
-    const promo = json[id];
-    if (type === "image") return Object.keys(promo.media.images).length > 0;
-    else if (type === "video") return promo.media.videos.length > 0;
-    return false;
+
+  let keys = Object.keys(json).filter(id => {
+    const promo = json[id].media;
+    if (type === "image") return promo.images.length > 0;
+    else return promo.videos.length > 0;
   });
   if (keys.length === 0) {
-    console.warn("CS -- No promotions found for the given parameters");
+    console.warn("CS -- No promotions found with given parameters");
     return {};
   }
-  let promo, path, tries = 0;
+
+  let promo, path, tries = 0, cache = [...keys];
   while (tries < keys.length) {
-    const id = randItem(keys);
+    const id = randItem(cache);
     promo = json[id];
+    cache.splice(cache.indexOf(id), 1);
     const media = promo.media;
     if (type === "image") {
-      const imgs = media.images;
-      let img = imgs.find(v => (!optParams.aspectRatio || v.size === optParams.aspectRatio));
+      let img = media.images.find(i => (!optParams.aspectRatio || i.size === optParams.aspectRatio));
       path = img ? `${img.size}.${img.type}` : null;
     } else if (type === "video") {
-      const videos = media.videos;
-      let video = videos.find(v => 
+      let video = media.videos.find(v => 
         (!optParams.aspectRatio || v.size === optParams.aspectRatio) && (!optParams.videoLength || v.length === optParams.videoLength)
       );
       path = video ? `sz${video.size.replace(":", "x")}leng${video.length}.${video.type}` : null;
@@ -72,7 +71,7 @@ function getPromotion(type, optParams) {
     tries++;
   }
   if (!path) {
-    console.warn("CS -- No promotions found for the given parameters");
+    console.warn("CS -- No promotions found with given parameters");
     return {};
   }
   const returner = { ...promo };
