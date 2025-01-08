@@ -76,7 +76,7 @@ window.CommunitySpotlight.utils["filterPromos"] = function (json, type, optParam
       path = `${media.size}.${media.type}`;
   }
   delete returner.media;
-  returner.url = `${base}promotion-media/main/${encodeURIComponent(returner.id)}/${path}`;
+  returner.url = `${window.CommunitySpotlight.base}promotion-media/main/${encodeURIComponent(returner.id)}/${path}`;
   return returner;
 }
 
