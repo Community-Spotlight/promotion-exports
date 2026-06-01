@@ -1,0 +1,87 @@
+/**
+  Promotion Space Styles
+  !AUTOMATICALLY IMPORTED BY EXPORTS!
+
+  Version: 2.0.0
+**/
+body {
+  --cs-promo-bg: #1f1f1f;
+  --cs-promo-bg-light: #252525;
+  --cs-promo-shadow: rgba(0, 0, 0, 0.5);
+  --cs-promo-txt-color: #fff;
+}
+
+promo-space {
+  display: block;
+  width: max-content;
+  height: max-content;
+  position: relative;
+  background-color: var(--cs-promo-bg);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+promo-space .media {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+promo-space .controls {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  transform: translate(0, -50%);
+  width: 100%;
+  background: var(--cs-promo-bg-light);
+  box-shadow: 0 5px 5px 0px var(--cs-promo-shadow);
+  border-radius: 0 0 10px 10px;
+  cursor: auto;
+  transition: transform 250ms cubic-bezier(0.85, -0.05, 0.25, 1);
+}
+promo-space:hover .controls {
+  transform: translate(0, 100%);
+}
+
+promo-space .controls-inner {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+promo-space .title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 90%;
+  font-weight: bold;
+  color: var(--cs-promo-txt-color);
+  text-shadow: 0 5px 5px var(--cs-promo-shadow);
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+}
+
+promo-space .controls button {
+  background: none;
+  border: none;
+  padding: 0 0 0 10px;
+  width: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition:
+    transform 200ms ease-in-out,
+    filter 200ms ease-in-out;
+}
+promo-space .controls button img {
+  filter: grayscale(1) contrast(5);
+  width: 100%;
+}
+promo-space .controls button:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}

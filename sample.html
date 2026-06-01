@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Export Examples</title>
+  </head>
+  <body>
+    <h1>Export Examples</h1>
+    <div>
+      <!-- Image Promotion of ratio 250x250px -->
+      <promo-space type="image" ratio="250x250"></promo-space>
+      <!-- Same as above but controls are given -->
+      <promo-space type="image" ratio="250x250" controls></promo-space>
+      <!-- Video Promotion of length 5, any ratio, element is sized 480x360px-->
+      <promo-space
+        type="video"
+        length="5"
+        width="480px"
+        height="360px"
+      ></promo-space>
+      <!-- Same as above but controls are given, clicking to open source is more accurate -->
+      <promo-space
+        type="video"
+        length="5"
+        width="480px"
+        height="360px"
+        controls
+      ></promo-space>
+    </div>
+    <script src="./dist/community-spotlight.js"></script>
+    <!-- window._communitySpotlight has several utilities -->
+  </body>
+</html>
