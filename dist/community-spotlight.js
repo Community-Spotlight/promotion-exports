@@ -6,7 +6,7 @@
  *
  * By: Community Spotlight Team
  * Licence: MIT
- * Version: 2.0.0
+ * Version: 2.0.01
  */
 (function () {
   /* Constants */
@@ -60,6 +60,7 @@
      */
     static _rngListItem(list) {
       // TODO add random chance multiplier feature here
+      if (list.length === 1) return list[0];
       return list[Math.floor(Math.random() * list.length)];
     }
 
@@ -147,6 +148,7 @@
      * @param {String} ratio Aspect ratio of Promotion
      * @param {Array<String>} tags List of tags to filter
      * @param {Number} vidLength Requested length of video
+     * @returns Cleansed Promotion if one is found, otherwise null
      */
     static getPromo(type, ratio, tags, vidLength = 0) {
       if (!type) type = "image";
@@ -178,12 +180,14 @@
 
       // Normalize Media
       index = structuredClone(index).map((p) => {
-        p.media = p.media[normType][0]; // There can only be 1 media per-ratio
+        p.media = CS_CONTEXT._rngListItem(p.media[normType]);
         return p;
       });
 
       const rngRawPromo = CS_CONTEXT._rngListItem(index);
-      return CS_CONTEXT.cleansePromo(rngRawPromo);
+      return rngRawPromo
+        ? CS_CONTEXT.cleansePromo(rngRawPromo)
+        : null;
     }
   }
 
@@ -258,7 +262,7 @@
         const metadata = this.extractMetaData();
         metadata.videoLength = Number(metadata.videoLength);
         metadata.type = CS_CONTEXT._normalizeMediaType(metadata.type);
-        metadata.tags = metadata.tags ? JSON.parse(metadata.tags) : null;
+        metadata.tags = metadata.tags ? String(metadata.tags).replaceAll(", ", ",").split(",") : null;
 
         if (metadata.width) this.style.width = metadata.width;
         if (metadata.height) this.style.height = metadata.height;
@@ -271,9 +275,14 @@
           metadata.videoLength,
         );
 
+        if (!this._promo) {
+          console.warn("Community Spotlight: No Promotion Found!" [this]);
+          return;
+        }
+
         this.initGraphic();
       } catch (e) {
-        console.warn("Could not initialize Promotion: ", this, e);
+        console.warn("Could not initialize Promotion: ", [this], e);
       }
     }
 
