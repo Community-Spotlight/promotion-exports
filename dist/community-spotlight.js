@@ -6,7 +6,7 @@
  *
  * By: Community Spotlight Team
  * Licence: MIT
- * Version: 2.0.01
+ * Version: 2.0.02
  */
 (function () {
   /* Constants */
@@ -98,6 +98,15 @@
      */
     static setGlobalTags(tags) {
       CS_CONTEXT._globalTags = CS_CONTEXT._normalizeTags(tags);
+    }
+
+    /**
+     * Gets the tag list that filters what genres of promotions to display.
+     *
+     * @returns List of Tags
+     */
+    static getGlobalTags() {
+      return CS_CONTEXT._globalTags;
     }
 
     /**
@@ -304,6 +313,7 @@
   const exports = {
     startSession: CS_CONTEXT.startSession,
     setGlobalTagFilter: CS_CONTEXT.setGlobalTags,
+    getGlobalTagFilter: CS_CONTEXT.getGlobalTags,
     getAllPromos: CS_CONTEXT.getIndex,
     randomPromotion: CS_CONTEXT.getPromo,
   };
