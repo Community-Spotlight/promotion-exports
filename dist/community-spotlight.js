@@ -4,9 +4,9 @@
  * This script can be imported directly into your HTML page or pasted into your JS.
  * Documentation is available at <https://community-spotlight.github.io/?page=developers>
  *
- * By: Community Spotlight Team
+ * By: Community Spotlight Team <https://github.com/Community-Spotlight>
  * Licence: MIT
- * Version: 2.0.02
+ * Version: 2.0.03
  */
 (function () {
   /* Constants */
@@ -125,6 +125,8 @@
      * @returns Cleansed Promotion
      */
     static cleansePromo(rawPromo) {
+      if (!rawPromo) return null;
+
       const promo = {
         id: rawPromo.id,
         tags: rawPromo.tags,
@@ -165,33 +167,41 @@
       const normType = CS_CONTEXT._normalizeMediaType(type).value + "s";
 
       let index = CS_CONTEXT.getIndex();
+
+      // Filter by tags
       if (tags.length) {
-        // Filter by tags
         index = index.filter((p) => p.tags.some((t) => tags.includes(t)));
       }
+
+      // Filter by aspect ratio
       if (ratio) {
-        // Filter by ratios
-        ratio = String(ratio).toLowerCase();
-        index.forEach((p) => {
-          p.media[normType] = p.media[normType].filter((v) => v.size === ratio);
-        });
+        index = index.map((p) => ({
+          ...p,
+          media: {
+            ...p.media,
+            [normType]: p.media[normType].filter((v) => v.size === ratio),
+          },
+        }));
       }
+
+      // Filter videos by length without mutating originals
       if (normType === "videos" && vidLength > 0) {
-        // Filter by length
-        index.forEach((p) => {
-          p.media[normType] = p.media[normType].filter(
-            (v) => v.length === vidLength,
-          );
-        });
+        index = index.map((p) => ({
+          ...p,
+          media: {
+            ...p.media,
+            [normType]: p.media[normType].filter((v) => v.length === vidLength),
+          },
+        }));
       }
 
-      index = index.filter((p) => p.media[normType].length); // Filter by type
+      // Filter by type
+      index = index.filter((p) => p.media[normType].length);
 
-      // Normalize Media
-      index = structuredClone(index).map((p) => {
-        p.media = CS_CONTEXT._rngListItem(p.media[normType]);
-        return p;
-      });
+      index = index.map((p) => ({
+        ...p,
+        media: CS_CONTEXT._rngListItem(p.media[normType]),
+      }));
 
       const rngRawPromo = CS_CONTEXT._rngListItem(index);
       return rngRawPromo
