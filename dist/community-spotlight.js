@@ -4,9 +4,9 @@
  * This script can be imported directly into your HTML page or pasted into your JS.
  * Documentation is available at <https://community-spotlight.github.io/?page=developers>
  *
- * By: Community Spotlight Team
+ * By: Community Spotlight Team <https://github.com/Community-Spotlight>
  * Licence: MIT
- * Version: 2.0.02
+ * Version: 2.0.03
  */
 (function () {
   /* Constants */
