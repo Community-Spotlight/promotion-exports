@@ -6,7 +6,7 @@
  *
  * By: Community Spotlight Team <https://github.com/Community-Spotlight>
  * Licence: MIT
- * Version: 2.0.03
+ * Version: 2.0.04
  */
 (function () {
   /* Constants */
@@ -204,9 +204,7 @@
       }));
 
       const rngRawPromo = CS_CONTEXT._rngListItem(index);
-      return rngRawPromo
-        ? CS_CONTEXT.cleansePromo(rngRawPromo)
-        : null;
+      return rngRawPromo ? CS_CONTEXT.cleansePromo(rngRawPromo) : null;
     }
   }
 
@@ -259,6 +257,17 @@
       const domType = metadata.type.dom;
       const hasControls = metadata.hasControls;
 
+      const loader = document.createElement("div");
+      loader.setAttribute("class", "loader");
+      loader.innerHTML = `<span class="title">Loading Promotion...</span><span class="load-circle"></span>`;
+      this.appendChild(loader);
+
+      if (!promo) {
+        console.warn("Community Spotlight: No Promotion Found!", [this]);
+        loader.querySelector(".title").textContent = "No Promotion Found!";
+        return;
+      }
+
       const dom = document.createElement(domType);
       dom.setAttribute("class", "media");
       dom.setAttribute("loading", "lazy");
@@ -274,6 +283,10 @@
       } else {
         PromoSpace._clickWrap(this, () => window.open(promo.url, "_blank"));
       }
+
+      const loadEvent = domType === "video" ? "loadeddata" : "load";
+      dom.addEventListener(loadEvent, () => loader.remove());
+      if (domType === "img" && dom.complete) loader.remove();
     }
 
     initElement() {
@@ -281,7 +294,9 @@
         const metadata = this.extractMetaData();
         metadata.videoLength = Number(metadata.videoLength);
         metadata.type = CS_CONTEXT._normalizeMediaType(metadata.type);
-        metadata.tags = metadata.tags ? String(metadata.tags).replaceAll(", ", ",").split(",") : null;
+        metadata.tags = metadata.tags
+          ? String(metadata.tags).replaceAll(", ", ",").split(",")
+          : null;
 
         if (metadata.width) this.style.width = metadata.width;
         if (metadata.height) this.style.height = metadata.height;
@@ -293,11 +308,6 @@
           metadata.tags,
           metadata.videoLength,
         );
-
-        if (!this._promo) {
-          console.warn("Community Spotlight: No Promotion Found!" [this]);
-          return;
-        }
 
         this.initGraphic();
       } catch (e) {
